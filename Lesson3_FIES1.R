@@ -64,10 +64,13 @@ count.df<-count.df %>% group_by(W_REGN) %>% summarise(sum_count=sum(rfact_count)
 dictionary[Label.name] ## the first element is the region
 # u generated the start and end indices separately
 Region.label<-dictionary[Label.valueset.start[1]:end[1]]
+Region.label
 # there a few ways to do this, lets use separate
 
-Region.label<-as_tibble(Region.label) %>% separate(col=1,sep=";",into=c("Value","Region"))
-Region.label<-Region.label %>%  mutate(Value=gsub("Value=","",Value))
+Region.label<-as_tibble(Region.label) %>% # turn it into a tibble
+  separate(col=1,sep=";",into=c("Value","Region")) # separate functon,?separate
+Region.label<-Region.label %>%  mutate(Value=gsub("Value=","",Value)) #then re-write
+  # the Value column, taking out the word "Value="
 
 count.df<-count.df %>% mutate(W_REGN=factor(W_REGN,levels=as.numeric(Region.label[["Value"]]),
                 labels=Region.label[["Region"]])) %>% 
